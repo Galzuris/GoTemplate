@@ -1,0 +1,20 @@
+{
+    "build": { "dockerfile": "Dockerfile" },
+
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "golang.Go",
+                "premparihar.gotestexplorer",
+                "ms-vscode.makefile-tools",
+                "ms-azuretools.vscode-docker",
+                "donjayamanne.git-extension-pack",
+                "redhat.vscode-yaml"
+            ]
+        }
+    },
+
+    "forwardPorts": [
+        4500
+    ]
+}
