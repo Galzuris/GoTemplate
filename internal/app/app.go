@@ -20,10 +20,12 @@ func Run(cfg *config.Config) {
 		log.Fatalln(fmt.Errorf("app:run - postgres: %w", err))
 	}
 	defer pg.Close()
+	log.Println("app:run postgres started")
 
 	// HTTP Server
 	httpHandler := gin.New()
 	httpServer := httpserver.New(httpHandler, httpserver.Addr(cfg.HTTP.Host, cfg.HTTP.Port))
+	log.Println("app:run httpserver started (" + cfg.HTTP.Host + ":" + cfg.HTTP.Port + ")")
 
 	// Waiting signal
 	interrupt := make(chan os.Signal, 1)

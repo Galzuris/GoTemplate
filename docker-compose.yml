@@ -12,7 +12,7 @@ services:
     command: "go run cmd/app/main.go"
     working_dir: /workspace/
     ports:
-      - 4501:4500    
+      - 4501:80
     environment:
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/app
     depends_on:
