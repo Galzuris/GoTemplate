@@ -1,6 +1,10 @@
 version: '3'
 
+networks:
+  backend:
+
 services:
+  # Backend | Golang
   backend:
     image: golang:1.22-alpine3.19
     volumes:
@@ -8,4 +12,22 @@ services:
     command: "go run cmd/app/main.go"
     working_dir: /workspace/
     ports:
-      - 4501:4500
+      - 4501:4500    
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/app
+    depends_on:
+      - database
+    networks:
+      - backend
+  # Database | Postgres
+  database:
+    image: postgres:16-alpine
+    restart: always
+    volumes:
+      - ./docker/mount/pgsql:/var/lib/postgresql/data
+    environment:      
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=app
+    networks:
+      - backend

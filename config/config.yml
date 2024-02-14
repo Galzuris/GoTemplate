@@ -1,3 +1,6 @@
 http:
   port: 4500
   host: 0.0.0.0
+
+database:
+  pool_max: 2

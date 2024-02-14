@@ -2,7 +2,9 @@ package app
 
 import (
 	"backend/config"
-	"backend/services/httpserver"
+	"backend/core/httpserver"
+	"backend/core/postgres"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -12,6 +14,13 @@ import (
 )
 
 func Run(cfg *config.Config) {
+	// Database
+	pg, err := postgres.New(cfg.Database.URL, postgres.MaxPoolSize(cfg.Database.PoolMax))
+	if err != nil {
+		log.Fatalln(fmt.Errorf("app:run - postgres: %w", err))
+	}
+	defer pg.Close()
+
 	// HTTP Server
 	httpHandler := gin.New()
 	httpServer := httpserver.New(httpHandler, httpserver.Addr(cfg.HTTP.Host, cfg.HTTP.Port))
@@ -28,7 +37,7 @@ func Run(cfg *config.Config) {
 		log.Printf("app:run httpserver error: %s", err)
 	}
 
-	err := httpServer.Shutdown()
+	err = httpServer.Shutdown()
 	if err != nil {
 		log.Printf("app:run httpserver shutdown error: %s", err)
 	}
