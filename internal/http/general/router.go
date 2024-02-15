@@ -1,6 +1,8 @@
 package general
 
 import (
+	timeHandler "backend/internal/domain/general/time/handler"
+
 	"backend/internal/exception"
 	"backend/internal/http/middleware"
 	"errors"
@@ -14,10 +16,9 @@ func NewRouter(handler *gin.Engine) {
 	handler.Use(gin.Recovery())
 	handler.Use(middleware.ErrorHandler())
 
-	handler.GET("/", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, "ok")
-	})
+	handler.GET("/time", timeHandler.GetTime)
 
+	// TEST HANDLER
 	handler.GET("/abort", func(ctx *gin.Context) {
 		ctx.AbortWithError(http.StatusForbidden, errors.New("forbidden"))
 	})
