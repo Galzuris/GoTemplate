@@ -1,11 +1,3 @@
-# Run from .devcontainer
-
-run:
-	@go run ./cmd/app/main.go
-
-install:
-	@go mod tidy
-
 # Run from Docker environment
 
 up:
@@ -16,3 +8,9 @@ down:
 
 restart:
 	docker compose restart backend
+
+database:
+	docker compose exec database psql -U postgres -d app
+
+migrate-up:
+	docker compose exec backend go run -tags migrate ./cmd/app

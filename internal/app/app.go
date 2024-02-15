@@ -4,6 +4,7 @@ import (
 	"backend/config"
 	"backend/core/httpserver"
 	"backend/core/postgres"
+	"backend/internal/http/general"
 	"fmt"
 	"log"
 	"os"
@@ -24,6 +25,7 @@ func Run(cfg *config.Config) {
 
 	// HTTP Server
 	httpHandler := gin.New()
+	general.NewRouter(httpHandler)
 	httpServer := httpserver.New(httpHandler, httpserver.Addr(cfg.HTTP.Host, cfg.HTTP.Port))
 	log.Println("app:run httpserver started (" + cfg.HTTP.Host + ":" + cfg.HTTP.Port + ")")
 
