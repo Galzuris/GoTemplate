@@ -19,13 +19,10 @@ func NewRouter(handler *gin.Engine) {
 	})
 
 	handler.GET("/abort", func(ctx *gin.Context) {
-		ctx.AbortWithStatusJSON(
-			http.StatusUnprocessableEntity,
-			exception.NewApiException(http.StatusUnprocessableEntity, "user not found"),
-		)
+		ctx.AbortWithError(http.StatusForbidden, errors.New("forbidden"))
 	})
 
 	handler.GET("/exception", func(ctx *gin.Context) {
-		ctx.Error(errors.New("user not found"))
+		ctx.Error(exception.NewApiException(http.StatusUnprocessableEntity, "user not accepted"))
 	})
 }

@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"log"
+	"backend/internal/exception"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,11 +12,14 @@ func ErrorHandler() gin.HandlerFunc {
 		c.Next()
 
 		for _, err := range c.Errors {
-			log.Println("app http error: " + err.Error())
+			if er, ok := err.Err.(*exception.ApiException); ok {
+				c.AbortWithStatusJSON(er.Status, gin.H{"message": er.Message})
+				return
+			}
 		}
 
 		if len(c.Errors) > 0 {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, "internal error")
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "internal server error"})
 		}
 	}
 }
